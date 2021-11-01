@@ -10,6 +10,24 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CareItApp">
         <activity
+            android:name=".technician.TechnicianHomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".customer.CustomerHomeActivity"
+            android:exported="true" />
+        <activity
+            android:name=".technician.TechnicianRegistrationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".technician.TechnicianLoginActivity"
+            android:exported="true" />
+        <activity
+            android:name=".customer.CustomerRegistrationActivity"
+            android:exported="true" />
+        <activity
+            android:name=".customer.CustomerLoginActivity"
+            android:exported="true" />
+        <activity
             android:name=".MainActivity"
             android:exported="true">
             <intent-filter>
