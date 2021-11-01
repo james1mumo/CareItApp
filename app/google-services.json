@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "386857098752",
+    "project_id": "careitclassapp",
+    "storage_bucket": "careitclassapp.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:386857098752:android:b3ab50b9a9db70576ac2e5",
+        "android_client_info": {
+          "package_name": "com.dekut.careitapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "386857098752-6mf76t9pe8retlttp6i5jftdmeosim4i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDCz6_kyE4SDXifHAA32PtaOwj0J_3Bz0c"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "386857098752-6mf76t9pe8retlttp6i5jftdmeosim4i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
