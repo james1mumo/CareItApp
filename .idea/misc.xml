@@ -10,6 +10,7 @@
         <entry key="app/src/main/res/drawable/login_background.xml" value="0.15104166666666666" />
         <entry key="app/src/main/res/drawable/spinner.xml" value="0.15104166666666666" />
         <entry key="app/src/main/res/layout/activity_about.xml" value="0.1" />
+        <entry key="app/src/main/res/layout/activity_chat.xml" value="0.19322916666666667" />
         <entry key="app/src/main/res/layout/activity_customer_home.xml" value="0.25" />
         <entry key="app/src/main/res/layout/activity_customer_login.xml" value="0.18659420289855072" />
         <entry key="app/src/main/res/layout/activity_customer_registration.xml" value="0.25317028985507245" />
