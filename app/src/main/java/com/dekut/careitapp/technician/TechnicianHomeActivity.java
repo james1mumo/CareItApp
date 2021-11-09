@@ -67,7 +67,7 @@ public class TechnicianHomeActivity extends AppCompatActivity {
                     descriptions.add(request.child("serviceDescription").getValue().toString());
                     locations.add(request.child("serviceLocation").getValue().toString());
                     images.add("my_image_url_here");
-                    users.add("user-id_here");
+                    users.add(request.child("userId").getValue().toString());
                 }
 
                 //create an adapter

@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.CareItApp">
         <activity
+            android:name=".customer.CustomerChatActivity"
+            android:exported="true" />
+        <activity
+            android:name=".customer.CustomerHistoryActivity"
+            android:exported="true" />
+        <activity
             android:name=".ChatActivity"
             android:exported="true" />
         <activity

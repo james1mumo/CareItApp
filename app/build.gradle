@@ -42,4 +42,8 @@ dependencies {
 
     //FancyToast library
     implementation 'io.github.shashank02051997:FancyToast:2.0.1'
+
+    //chats
+    implementation 'me.himanshusoni.chatmessageview:chat-message-view:1.0.7'
+
 }

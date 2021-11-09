@@ -97,10 +97,11 @@
                     android:id="@+id/textViewError"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:text="Don't have an account? Register here."
+                    android:text="Are you are technician? Click here"
                     android:textColor="@color/black"
                     android:padding="16dp"/>
-                <Button
+
+                    <Button
                     android:id="@+id/buttonSignUp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
@@ -112,8 +113,9 @@
                     android:textAppearance="?android:textAppearanceMedium"
                     android:textColor="@android:color/white"
                     />
+                </LinearLayout>
 
-            </LinearLayout>
+
         </ScrollView>
 
     </androidx.cardview.widget.CardView>

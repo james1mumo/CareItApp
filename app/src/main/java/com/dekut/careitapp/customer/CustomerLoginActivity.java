@@ -15,6 +15,7 @@ import android.widget.Toast;
 
 import com.dekut.careitapp.AboutActivity;
 import com.dekut.careitapp.R;
+import com.dekut.careitapp.technician.TechnicianLoginActivity;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.Task;
@@ -43,8 +44,12 @@ public class CustomerLoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
 
-//        editTextEmail.setText("james1mumo@gmail.com");
-//        editTextPassword.setText("123456");
+        editTextEmail.setText("james1mumo@gmail.com");
+        editTextPassword.setText("123456");
+
+        textViewError.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), TechnicianLoginActivity.class));
+        });
 
         buttonLogin.setOnClickListener(new View.OnClickListener() {
             @Override
