@@ -111,7 +111,7 @@ class MyListAdapter extends ArrayAdapter<String> {
 
     public View getView(int position, View view, ViewGroup parent) {
         LayoutInflater inflater=context.getLayoutInflater();
-        View rowView=inflater.inflate(R.layout.mylist, null,true);
+        View rowView = inflater.inflate(R.layout.mylist, null,true);
 
         TextView description = (TextView) rowView.findViewById(R.id.textViewDescription);
         ImageView imageView = (ImageView) rowView.findViewById(R.id.imageView);

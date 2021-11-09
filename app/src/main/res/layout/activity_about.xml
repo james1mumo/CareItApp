@@ -27,6 +27,74 @@
                 app:cardElevation="3dp"
                 android:layout_marginBottom="8dp"
                 android:layout_marginHorizontal="16dp">
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical">
+
+                    <ImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="200dp"
+                        android:layout_gravity="center"
+                        android:layout_margin="16dp"
+                        android:src="@drawable/pic_profile" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_horizontal"
+                        android:padding="16dp"
+                        android:text="These are the objectives of our project:"
+                        android:textColor="@color/purple_700"
+                        android:textSize="19sp"
+                        android:textStyle="bold" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="1.Linking customers to service providers "
+                        android:textColor="@color/black"
+                        android:textSize="19sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="2. Payment through M-PESA"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="3.Chatting between customer and service provider"
+                        android:textColor="@color/black"
+                        android:textSize="19sp" />
+
+                    <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="16dp"
+                        android:text="4. Uploading the image of what customer needs to be repaired"
+                        android:textColor="@color/black"
+                        android:textSize="20sp" />
+
+                </LinearLayout>
+
+            </androidx.cardview.widget.CardView>
+            <androidx.cardview.widget.CardView
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:paddingVertical="32dp"
+                app:cardCornerRadius="10dp"
+                app:cardElevation="3dp"
+                android:layout_marginBottom="8dp"
+                android:layout_marginHorizontal="16dp">
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:orientation="vertical"
@@ -65,26 +133,26 @@
                             android:id="@+id/paul_whatsapp"
                             android:layout_width="match_parent"
                             android:layout_weight="1"
-                            
+
                             android:src="@drawable/icon_whatsapp"
                             android:onClick="launchWhatsApp"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             android:id="@+id/paul_phone"
                             android:src="@drawable/icon_phone"
                             android:onClick="launchPhone"
                             android:layout_width="match_parent"
-                            
+
                             android:layout_weight="1"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             android:id="@+id/paul_gmail"
                             android:layout_width="match_parent"
-                            
+
                             android:src="@drawable/icon_gmail"
                             android:onClick="launchGmail"
                             android:layout_weight="1"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -140,7 +208,7 @@
                             
                             android:src="@drawable/icon_whatsapp"
                             android:onClick="launchWhatsApp"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             android:id="@+id/nzangi_phone"
                             android:src="@drawable/icon_phone"
@@ -148,14 +216,14 @@
                             
                             android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             android:id="@+id/nzangi_gmail"
                             android:layout_width="match_parent"
                             android:src="@drawable/icon_gmail"
                             android:onClick="launchGmail"
                             android:layout_weight="1"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
 
                     </LinearLayout>
 
@@ -212,7 +280,7 @@
                             android:layout_weight="1"
                             android:src="@drawable/icon_whatsapp"
                             android:onClick="launchWhatsApp"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             android:id="@+id/victor_phone"
                             android:src="@drawable/icon_phone"
@@ -220,7 +288,7 @@
                             android:layout_width="match_parent"
                             android:layout_weight="1"
                             
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             
                             android:id="@+id/victor_gmail"
@@ -228,7 +296,7 @@
                             android:src="@drawable/icon_gmail"
                             android:onClick="launchGmail"
                             android:layout_weight="1"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
 
                     </LinearLayout>
 
@@ -250,7 +318,7 @@
                     android:orientation="vertical"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:src="@drawable/pic_brian_musili"
+                        android:src="@drawable/pic_musili"
                         android:layout_gravity="center"
                         android:layout_margin="16dp"
                         android:layout_width="match_parent"
@@ -268,7 +336,7 @@
                     <TextView
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:text="C026-01-1306/2019"
+                        android:text="C026-01-1304/2019"
                         android:textSize="20sp"
                         android:gravity="center_horizontal"
                         android:textColor="@color/purple_700"
@@ -285,7 +353,7 @@
                             android:layout_weight="1"
                             android:src="@drawable/icon_whatsapp"
                             android:onClick="launchWhatsApp"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             android:id="@+id/musili_phone"
                             android:src="@drawable/icon_phone"
@@ -293,7 +361,7 @@
                             
                             android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             android:id="@+id/musili_gmail"
                             
@@ -301,7 +369,7 @@
                             android:src="@drawable/icon_gmail"
                             android:onClick="launchGmail"
                             android:layout_weight="1"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
 
                     </LinearLayout>
 
@@ -358,7 +426,7 @@
                             android:layout_weight="1"
                             android:src="@drawable/icon_whatsapp"
                             android:onClick="launchWhatsApp"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             android:id="@+id/james_phone"
                             
@@ -366,7 +434,7 @@
                             android:onClick="launchPhone"
                             android:layout_width="match_parent"
                             android:layout_weight="1"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
                         <ImageView
                             android:id="@+id/james_gmail"
                             
@@ -374,7 +442,7 @@
                             android:src="@drawable/icon_gmail"
                             android:onClick="launchGmail"
                             android:layout_weight="1"
-                            android:layout_height="100dp"/>
+                            android:layout_height="50dp"/>
 
                     </LinearLayout>
 
