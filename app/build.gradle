@@ -46,4 +46,7 @@ dependencies {
     //chats
     implementation 'me.himanshusoni.chatmessageview:chat-message-view:1.0.7'
 
+    //mpesa api
+    implementation 'com.androidstudy:daraja:1.0.2'
+
 }

@@ -35,6 +35,8 @@ public class CustomerChatActivity extends AppCompatActivity {
     private ProgressDialog progressDialog;
     private FirebaseAuth firebaseAuth;
     private String user;
+    private Button buttonUpload;
+
     ArrayList<String> arrayListTechniciansIds = new ArrayList<>();
     ArrayList<String> arrayListTechnicians = new ArrayList<>();
     ArrayList<String> arrayListMobile = new ArrayList<>();
@@ -50,6 +52,10 @@ public class CustomerChatActivity extends AppCompatActivity {
 
         user = firebaseAuth.getUid();
         listView = findViewById(R.id.listView);
+        buttonUpload = findViewById(R.id.buttonUpload);
+        buttonUpload.setOnClickListener(v -> {
+            startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
+        });
 
         progressDialog.setTitle("Please Wait...");
         progressDialog.setMessage("Loading Chats");

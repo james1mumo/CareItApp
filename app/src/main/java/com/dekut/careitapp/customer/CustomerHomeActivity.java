@@ -1,5 +1,6 @@
 package com.dekut.careitapp.customer;
 
+import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -23,6 +24,12 @@ import android.widget.Spinner;
 import android.widget.Toast;
 
 
+import com.androidstudy.daraja.Daraja;
+import com.androidstudy.daraja.DarajaListener;
+import com.androidstudy.daraja.model.AccessToken;
+import com.androidstudy.daraja.model.LNMExpress;
+import com.androidstudy.daraja.model.LNMResult;
+import com.androidstudy.daraja.util.TransactionType;
 import com.dekut.careitapp.ChatActivity;
 import com.dekut.careitapp.R;
 import com.dekut.careitapp.technician.TechnicianLoginActivity;
@@ -37,9 +44,10 @@ import java.util.ArrayList;
 import java.util.HashMap;
 
 public class CustomerHomeActivity extends AppCompatActivity {
+    private static final int AMOUNT = 100;
     private static final String TAG = "System";
     private static final int IMAGE_REQUEST = 2;
-    private EditText serviceEditTxt,locationEditTxt;
+    private EditText serviceEditTxt,locationEditTxt, editTextMobile;
     private Button addButton,uploadButton;
     private Spinner locationSpinner;
     private ImageView serviceImage;
@@ -47,8 +55,11 @@ public class CustomerHomeActivity extends AppCompatActivity {
     private String location;
     private FirebaseAuth firebaseAuth;
     private int CAMERA_REQUEST = 12;
-
     private Button buttonUpload, buttonHistory, buttonChats, buttonLogout;
+    private ProgressDialog progressDialog;
+    Daraja daraja;
+    String CONSUMER_KEY = "V20h0w0WUJUpZBLJFufR5XuScg6czdAQ";
+    String CONSUMER_SECRET = "2k7901XCA24exJ6K";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,7 +67,8 @@ public class CustomerHomeActivity extends AppCompatActivity {
         setContentView(R.layout.activity_customer_home);
         serviceEditTxt=findViewById(R.id.serviceDesc);
         locationEditTxt=findViewById(R.id.serviceLocation);
-        addButton=findViewById(R.id.chooseBtn);
+        editTextMobile = findViewById(R.id.editTextMobile);
+        serviceImage = findViewById(R.id.imageView);
 //        locationSpinner=findViewById(R.id.locationspinner);
         uploadButton=findViewById(R.id.uploadBtn);
 //        ArrayList<String> locations=new ArrayList<>();
@@ -71,6 +83,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
 //        locationAdapter.setDropDownViewResource(android.R.layout.simple_dropdown_item_1line);
 //        locationSpinner.setAdapter(locationAdapter);
 
+        progressDialog = new ProgressDialog(this);
 
         buttonUpload = findViewById(R.id.buttonUpload);
         buttonHistory = findViewById(R.id.buttonHistory);
@@ -103,25 +116,36 @@ public class CustomerHomeActivity extends AppCompatActivity {
             }
         });
 
+        //for Mpesa
+        daraja = Daraja.with(CONSUMER_KEY, CONSUMER_SECRET, new DarajaListener<AccessToken>() {
+            @Override
+            public void onResult(@NonNull AccessToken accessToken) {
+                Log.i(CustomerHomeActivity.this.getClass().getSimpleName(), accessToken.getAccess_token());
+            }
+
+            @Override
+            public void onError(String error) {
+                Log.e(CustomerHomeActivity.this.getClass().getSimpleName(), error);
+            }
+        });
+
 
         uploadButton.setOnClickListener(v -> {
             String serviceDescription=serviceEditTxt.getText().toString();
             String serviceLocation =locationEditTxt.getText().toString();
+            String mobile = editTextMobile.getText().toString();
 
             System.out.println(serviceDescription);
-                if(serviceDescription.isEmpty() || serviceLocation.isEmpty()){
+                if(serviceDescription.isEmpty() || serviceLocation.isEmpty() || mobile.isEmpty()){
                     Toast.makeText(getApplicationContext(),"Please Fill all the text field",Toast.LENGTH_LONG).show();
                 }
                 else{
-                    HashMap<String,Object> map=new HashMap();
-                    map.put("serviceDescription",serviceDescription);
-                    map.put("serviceLocation",serviceLocation);
-                    map.put("userId",firebaseAuth.getUid());
-                    FirebaseDatabase.getInstance().getReference().child("Client Request").child("Request").push().updateChildren(map);
-                    Toast.makeText(getApplicationContext(),"Adding your claim",Toast.LENGTH_LONG).show();
+
+                    makeMpesaPayment(mobile, String.valueOf(AMOUNT));
+
                 }
         });
-        addButton.setOnClickListener(new View.OnClickListener() {
+        serviceImage.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 chooseImage();
@@ -135,24 +159,87 @@ public class CustomerHomeActivity extends AppCompatActivity {
         startActivityForResult(intent , CAMERA_REQUEST);
     }
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-        super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==IMAGE_REQUEST && requestCode== Activity.RESULT_OK){
-            uri=data.getData();
-            getUploadImage();
-        }
+
+    private void makeMpesaPayment(String mobile, String  amount){
+        progressDialog.setTitle("Please Wait...");
+        progressDialog.setMessage("Processing MPesa Request");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
+
+        LNMExpress lnmExpress = new LNMExpress(
+                "174379",
+                "bfb279f9aa9bdbcf158e97dd71a467cd2e0c893059b10f78e6b72ada1ed2c919",  //https://developer.safaricom.co.ke/test_credentials
+                TransactionType.CustomerPayBillOnline,
+                amount,
+                mobile,
+                "174379",
+                mobile,
+                "http://mycallbackurl.com/checkout.php",
+                "Care It App",
+                "Care It App"
+        );
+
+        //For both Sandbox and Production Mode
+        daraja.requestMPESAExpress(lnmExpress,
+                new DarajaListener<LNMResult>() {
+                    @Override
+                    public void onResult(@NonNull LNMResult lnmResult) {
+                        Log.i(CustomerHomeActivity.this.getClass().getSimpleName(), lnmResult.ResponseDescription);
+                        FancyToast.makeText(getApplicationContext(), lnmResult.ResponseDescription, FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+                        progressDialog.dismiss();
+                        saveToFirebase();
+
+                    }
+
+                    @Override
+                    public void onError(String error) {
+                        Log.i(CustomerHomeActivity.this.getClass().getSimpleName(), error);
+                        FancyToast.makeText(getApplicationContext(), error, FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                        progressDialog.dismiss();
+                    }
+                }
+        );
     }
 
-    private void getUploadImage() {
-        ProgressDialog progress=new ProgressDialog(this);
-        progress.setTitle("Getting Upload Image");
-        progress.show();
+    private void uploadImage() {
+        progressDialog.setTitle("Please Wait...");
+        progressDialog.setMessage("Uploading Image");
+        progressDialog.setCanceledOnTouchOutside(false);
+        progressDialog.show();
 
         if(uri!= null) {
             StorageReference imageRef= FirebaseStorage.getInstance().getReference().child("Images").child(System.currentTimeMillis()+"."+getFileExtension(uri));
         }
     }
+
+    private void saveToFirebase(){
+        String serviceDescription=serviceEditTxt.getText().toString();
+        String serviceLocation =locationEditTxt.getText().toString();
+        String mobile = editTextMobile.getText().toString();
+
+        HashMap<String,Object> map=new HashMap();
+        map.put("serviceDescription",serviceDescription);
+        map.put("serviceLocation",serviceLocation);
+        map.put("userId",firebaseAuth.getUid());
+        map.put("mobile",mobile);
+        map.put("amount",AMOUNT);
+        FirebaseDatabase.getInstance().getReference().child("Client Request").child("Request").push().updateChildren(map);
+        FancyToast.makeText(this, "Upload made successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+        serviceEditTxt.setText("");
+        locationEditTxt.setText("");
+        editTextMobile.setText("");
+    }
+
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode==IMAGE_REQUEST && requestCode== Activity.RESULT_OK){
+            uri=data.getData();
+            uploadImage();
+        }
+    }
+
 
     private String getFileExtension(Uri uri) {
         ContentResolver contentResolver=getContentResolver();

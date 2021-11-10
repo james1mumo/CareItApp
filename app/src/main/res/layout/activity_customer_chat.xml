@@ -18,12 +18,13 @@
             android:id="@+id/buttonUpload"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="4.5"
             android:text="Upload" />
 
         <Button
             android:id="@+id/buttonHistory"
             android:layout_width="0dp"
+            android:visibility="gone"
             android:layout_height="wrap_content"
             android:layout_weight="3"
             android:text="History" />
@@ -31,8 +32,9 @@
         <Button
             android:id="@+id/buttonChats"
             android:layout_width="0dp"
+            android:visibility="invisible"
             android:layout_height="wrap_content"
-            android:layout_weight="3"
+            android:layout_weight="4.5"
             android:text="Chats" />
 
         <Button
