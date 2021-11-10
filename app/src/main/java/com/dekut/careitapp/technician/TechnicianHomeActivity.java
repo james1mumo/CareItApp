@@ -17,6 +17,7 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
 import com.dekut.careitapp.ChatActivity;
 import com.dekut.careitapp.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -66,7 +67,7 @@ public class TechnicianHomeActivity extends AppCompatActivity {
                 for (DataSnapshot request : snapshot.getChildren()){
                     descriptions.add(request.child("serviceDescription").getValue().toString());
                     locations.add(request.child("serviceLocation").getValue().toString());
-                    images.add("my_image_url_here");
+                    images.add(request.child("imageUrl").getValue().toString());
                     users.add(request.child("userId").getValue().toString());
                 }
 
@@ -119,7 +120,7 @@ class MyListAdapter extends ArrayAdapter<String> {
         Button buttonChat = rowView.findViewById(R.id.buttonChat);
 
         description.setText(descriptions.get(position));
-//        imageView.setImageResource(imgid.get(position));
+        Glide.with(context).load(imgid.get(position)).into(imageView);
 
         String location = locations.get(position);
         String user = users.get(position);

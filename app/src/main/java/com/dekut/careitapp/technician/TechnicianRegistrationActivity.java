@@ -91,7 +91,7 @@ public class TechnicianRegistrationActivity extends AppCompatActivity {
                 @Override
                 public void onComplete(@NonNull Task<AuthResult> task) {
                     if (task.isSuccessful()){
-                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Customers");
+                        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference("Technicians");
                         String uid = firebaseAuth.getUid();
                         Customer customer = new Customer(firstName,secondName,email,mobile,"");
                         if (uid != null){
@@ -100,7 +100,7 @@ public class TechnicianRegistrationActivity extends AppCompatActivity {
                                 public void onComplete(@NonNull Task<Void> task) {
                                     progressDialog.dismiss();
                                     FancyToast.makeText(getApplicationContext(), "Account Created Successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, true).show();
-                                    startActivity(new Intent(getApplicationContext(), CustomerHomeActivity.class));
+                                    startActivity(new Intent(getApplicationContext(), TechnicianHomeActivity.class));
                                     finish();
                                 }
                             });

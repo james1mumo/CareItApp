@@ -3,11 +3,16 @@ package com.dekut.careitapp.customer;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
 import android.app.Activity;
 import android.app.ProgressDialog;
 import android.content.ContentResolver;
 import android.content.Intent;
+import android.content.pm.PackageManager;
+import android.graphics.Bitmap;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.MediaStore;
@@ -33,13 +38,19 @@ import com.androidstudy.daraja.util.TransactionType;
 import com.dekut.careitapp.ChatActivity;
 import com.dekut.careitapp.R;
 import com.dekut.careitapp.technician.TechnicianLoginActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.OnFailureListener;
+import com.google.android.gms.tasks.OnSuccessListener;
+import com.google.android.gms.tasks.Task;
 import com.google.android.material.navigation.NavigationBarView;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.storage.FirebaseStorage;
 import com.google.firebase.storage.StorageReference;
+import com.google.firebase.storage.UploadTask;
 import com.shashank.sony.fancytoastlib.FancyToast;
 
+import java.io.ByteArrayOutputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 
@@ -57,9 +68,14 @@ public class CustomerHomeActivity extends AppCompatActivity {
     private int CAMERA_REQUEST = 12;
     private Button buttonUpload, buttonHistory, buttonChats, buttonLogout;
     private ProgressDialog progressDialog;
+
+    private Bitmap bitmap = null;
+
     Daraja daraja;
     String CONSUMER_KEY = "V20h0w0WUJUpZBLJFufR5XuScg6czdAQ";
     String CONSUMER_SECRET = "2k7901XCA24exJ6K";
+
+    public static final int MY_PERMISSIONS_REQUEST_CAMERA = 100;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -137,12 +153,11 @@ public class CustomerHomeActivity extends AppCompatActivity {
 
             System.out.println(serviceDescription);
                 if(serviceDescription.isEmpty() || serviceLocation.isEmpty() || mobile.isEmpty()){
-                    Toast.makeText(getApplicationContext(),"Please Fill all the text field",Toast.LENGTH_LONG).show();
-                }
-                else{
-
+                    FancyToast.makeText(getApplicationContext(), "Fill All Details First", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                }else if (bitmap == null){
+                    FancyToast.makeText(getApplicationContext(), "Choose Image First", FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+                }else{
                     makeMpesaPayment(mobile, String.valueOf(AMOUNT));
-
                 }
         });
         serviceImage.setOnClickListener(new View.OnClickListener() {
@@ -154,9 +169,14 @@ public class CustomerHomeActivity extends AppCompatActivity {
     }
 
     private void chooseImage() {
-       ;
-        Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
-        startActivityForResult(intent , CAMERA_REQUEST);
+       ;if (ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.CAMERA) != PackageManager.PERMISSION_GRANTED) {
+            FancyToast.makeText(getApplicationContext(), "Allow Camera Permissions", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
+            ActivityCompat.requestPermissions(this,  new String[]{Manifest.permission.CAMERA}, MY_PERMISSIONS_REQUEST_CAMERA);
+
+        } else {
+            Intent intent = new Intent(MediaStore.ACTION_IMAGE_CAPTURE);
+            startActivityForResult(intent , CAMERA_REQUEST);
+        }
     }
 
 
@@ -187,7 +207,7 @@ public class CustomerHomeActivity extends AppCompatActivity {
                         Log.i(CustomerHomeActivity.this.getClass().getSimpleName(), lnmResult.ResponseDescription);
                         FancyToast.makeText(getApplicationContext(), lnmResult.ResponseDescription, FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
                         progressDialog.dismiss();
-                        saveToFirebase();
+                        uploadImage();
 
                     }
 
@@ -203,16 +223,33 @@ public class CustomerHomeActivity extends AppCompatActivity {
 
     private void uploadImage() {
         progressDialog.setTitle("Please Wait...");
-        progressDialog.setMessage("Uploading Image");
+        progressDialog.setMessage("Uploading Image To Firebase");
         progressDialog.setCanceledOnTouchOutside(false);
         progressDialog.show();
+
+        String fileName = System.currentTimeMillis()+".jpg";
+
+        StorageReference storageRef = FirebaseStorage.getInstance().getReference("Images").child(fileName);
+
+        ByteArrayOutputStream byteArrayOutputStream = new ByteArrayOutputStream();
+        bitmap.compress(Bitmap.CompressFormat.JPEG, 100, byteArrayOutputStream);
+        byte[] data = byteArrayOutputStream.toByteArray();
+
+        storageRef.putBytes(data).addOnSuccessListener(taskSnapshot -> {
+            storageRef.getDownloadUrl().addOnSuccessListener(uri -> saveToFirebase(uri.toString()));
+            progressDialog.dismiss();
+        }).addOnFailureListener(e -> {
+            FancyToast.makeText(getApplicationContext(), e.toString(), FancyToast.LENGTH_LONG, FancyToast.ERROR, false).show();
+            progressDialog.dismiss();
+        });
 
         if(uri!= null) {
             StorageReference imageRef= FirebaseStorage.getInstance().getReference().child("Images").child(System.currentTimeMillis()+"."+getFileExtension(uri));
         }
     }
 
-    private void saveToFirebase(){
+    private void saveToFirebase(String url){
+
         String serviceDescription=serviceEditTxt.getText().toString();
         String serviceLocation =locationEditTxt.getText().toString();
         String mobile = editTextMobile.getText().toString();
@@ -221,22 +258,25 @@ public class CustomerHomeActivity extends AppCompatActivity {
         map.put("serviceDescription",serviceDescription);
         map.put("serviceLocation",serviceLocation);
         map.put("userId",firebaseAuth.getUid());
+        map.put("imageUrl",url);
         map.put("mobile",mobile);
         map.put("amount",AMOUNT);
-        FirebaseDatabase.getInstance().getReference().child("Client Request").child("Request").push().updateChildren(map);
+        FirebaseDatabase.getInstance().getReference().child("Client Request").child("Request").push().setValue(map);
         FancyToast.makeText(this, "Upload made successfully", FancyToast.LENGTH_LONG, FancyToast.SUCCESS, false).show();
         serviceEditTxt.setText("");
         locationEditTxt.setText("");
         editTextMobile.setText("");
+
+
+        buttonUpload.setText("Upload Successfully made");
     }
 
 
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+    protected void onActivityResult(int requestCode, int resultCode,  Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if(requestCode==IMAGE_REQUEST && requestCode== Activity.RESULT_OK){
-            uri=data.getData();
-            uploadImage();
+        if(requestCode==CAMERA_REQUEST && resultCode== Activity.RESULT_OK){
+            bitmap = (Bitmap) data.getExtras().get("data");
+            serviceImage.setImageBitmap(bitmap);
         }
     }
 
