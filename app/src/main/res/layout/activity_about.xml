@@ -245,7 +245,7 @@
                     android:orientation="vertical"
                     android:layout_height="wrap_content">
                     <ImageView
-                        android:src="@drawable/profile_pic"
+                        android:src="@drawable/pic_victor"
                         android:layout_gravity="center"
                         android:layout_margin="16dp"
                         android:layout_width="match_parent"

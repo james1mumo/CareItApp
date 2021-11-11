@@ -44,8 +44,8 @@ public class CustomerLoginActivity extends AppCompatActivity {
         firebaseAuth = FirebaseAuth.getInstance();
         progressDialog = new ProgressDialog(this);
 
-        editTextEmail.setText("james1mumo@gmail.com");
-        editTextPassword.setText("123456");
+//        editTextEmail.setText("james1mumo@gmail.com");
+//        editTextPassword.setText("123456");
 
         textViewError.setOnClickListener(v -> {
             startActivity(new Intent(getApplicationContext(), TechnicianLoginActivity.class));
